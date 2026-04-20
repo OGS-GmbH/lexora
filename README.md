@@ -2,7 +2,7 @@
 
 # Lexora
 
-*Zero-friction translation library for Next.js with fast server and client APIs and a clean developer experience.*
+_Zero-friction translation library for Next.js with fast server and client APIs and a clean developer experience._
 
 ![Preview](./docs/preview.avif)
 
@@ -75,23 +75,19 @@ import { getTranslations } from "@ogs-gmbh/lexora/server";
 import { LexoraProvider } from "@ogs-gmbh/lexora/client";
 import { postgresAdapter } from "@ogs-gmbh/lexora-postgres-adapter";
 
-function RootLayout () {
+function RootLayout() {
   const translations = await getTranslations({
     locale: "de",
-    adapters: [
-      postgresAdapter("postgres://admin:root@127.0.0.1:5432/default")
-    ]
+    adapters: [postgresAdapter("postgres://admin:root@127.0.0.1:5432/default")]
   });
 
   return (
     <html>
       <body>
-        <LexoraProvider data={translations}>
-          {children}
-        </LexoraProvider>
+        <LexoraProvider data={translations}>{children}</LexoraProvider>
       </body>
     </html>
-  )
+  );
 }
 
 export default RootLayout;
