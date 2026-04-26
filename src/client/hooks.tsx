@@ -2,8 +2,12 @@
 
 import { useContext } from "react";
 import { translate } from "../shared/translate.js";
-import type { TranslateFn, TranslateFnArgs } from "../shared/types.js";
-import { LexoraContext } from "./context.js";
+import type { Scopes, Translatables, TranslateFn, TranslateFnArgs } from "../shared/types.js";
+import { LexoraContext, LexoraLocaleContext } from "./context.js";
+
+function useLocale(): string {
+  return useContext(LexoraLocaleContext)!;
+}
 
 /**
  * Result of {@link useTranslation} hook
@@ -12,7 +16,11 @@ import { LexoraContext } from "./context.js";
  * @author Simon Kovtyk
  * @category Client-side
  */
-type UseTranslationReturn = TranslateFn;
+type UseTranslationReturn = {
+  translatables: Translatables;
+  translate: TranslateFn;
+  scopes?: Scopes[];
+};
 
 /**
  * React hook for translating a token.
@@ -23,16 +31,20 @@ type UseTranslationReturn = TranslateFn;
  * @category Client-side
  */
 function useTranslation(): UseTranslationReturn {
-  const translatables = useContext(LexoraContext)!;
+  const { translatables, scopes } = useContext(LexoraContext)!;
 
-  return ({ token, scope }: TranslateFnArgs): unknown =>
-    translate({
-      token,
-      scope,
-      translatables
-    });
+  return {
+    scopes,
+    translatables,
+    translate: ({ token, scope }: TranslateFnArgs): unknown =>
+      translate({
+        token,
+        scope,
+        translatables
+      })
+  };
 }
 
 export type { UseTranslationReturn };
 
-export { useTranslation };
+export { useTranslation, useLocale };

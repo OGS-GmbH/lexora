@@ -1,8 +1,16 @@
 "use client";
 
 import { type ReactNode } from "react";
-import type { Translatables } from "../shared/types.js";
-import { LexoraContext } from "./context.js";
+import { LexoraContext, LexoraLocaleContext, type LexoraContextValue } from "./context.js";
+
+type LexoraLocaleProviderProps = {
+  locale: string;
+  children: ReactNode;
+};
+
+function LexoraLocalProvider({ locale, children }: LexoraLocaleProviderProps) {
+  return <LexoraLocaleContext.Provider value={locale}>{children}</LexoraLocaleContext.Provider>;
+}
 
 /**
  * Props for {@link LexoraProvider}
@@ -11,14 +19,7 @@ import { LexoraContext } from "./context.js";
  * @since 1.0.0
  * @category Client-side
  */
-type LexoraProviderProps = {
-  /**
-   * Contains {@link Translatables}
-   *
-   * @author Simon Kovtyk
-   * @since 1.0.0
-   */
-  data: Translatables;
+type LexoraProviderProps = LexoraContextValue & {
   /**
    * Children of {@link LexoraProvider}
    *
@@ -38,10 +39,10 @@ type LexoraProviderProps = {
  * @since 1.0.0
  * @category Client-side
  */
-function LexoraProvider({ data, children }: LexoraProviderProps) {
-  return <LexoraContext.Provider value={data}>{children}</LexoraContext.Provider>;
+function LexoraProvider({ children, ...props }: LexoraProviderProps) {
+  return <LexoraContext.Provider value={props}>{children}</LexoraContext.Provider>;
 }
 
-export type { LexoraProviderProps };
+export type { LexoraProviderProps, LexoraLocaleProviderProps };
 
-export { LexoraProvider };
+export { LexoraProvider, LexoraLocalProvider };
