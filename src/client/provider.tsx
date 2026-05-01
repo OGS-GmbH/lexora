@@ -1,15 +1,16 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { LexoraContext, LexoraLocaleContext, type LexoraContextValue } from "./context.js";
+import type { Lang, ScopedTranslationsByToken, Scopes } from "../shared/types.js";
+import { LexoraContext, type LexoraContextValue, LexoraLangContext } from "./context.js";
 
-type LexoraLocaleProviderProps = {
-  locale: string;
+type LexoraLangProviderProps = {
+  lang: Lang;
   children: ReactNode;
 };
 
-function LexoraLocalProvider({ locale, children }: LexoraLocaleProviderProps) {
-  return <LexoraLocaleContext.Provider value={locale}>{children}</LexoraLocaleContext.Provider>;
+function LexoraLangProvider({ lang, children }: LexoraLangProviderProps) {
+  return <LexoraLangContext.Provider value={lang}>{children}</LexoraLangContext.Provider>;
 }
 
 /**
@@ -19,7 +20,8 @@ function LexoraLocalProvider({ locale, children }: LexoraLocaleProviderProps) {
  * @since 1.0.0
  * @category Client-side
  */
-type LexoraProviderProps = LexoraContextValue & {
+type LexoraTranslationsProviderProps<TScopes extends Scopes> = LexoraContextValue<TScopes> & {
+  translations: ScopedTranslationsByToken;
   /**
    * Children of {@link LexoraProvider}
    *
@@ -39,10 +41,13 @@ type LexoraProviderProps = LexoraContextValue & {
  * @since 1.0.0
  * @category Client-side
  */
-function LexoraProvider({ children, ...props }: LexoraProviderProps) {
+function LexoraTranslationsProvider<const TScopes extends Scopes = Scopes>({
+  children,
+  ...props
+}: LexoraTranslationsProviderProps<TScopes>) {
   return <LexoraContext.Provider value={props}>{children}</LexoraContext.Provider>;
 }
 
-export type { LexoraProviderProps, LexoraLocaleProviderProps };
+export type { LexoraTranslationsProviderProps, LexoraLangProviderProps };
 
-export { LexoraProvider, LexoraLocalProvider };
+export { LexoraTranslationsProvider, LexoraLangProvider };

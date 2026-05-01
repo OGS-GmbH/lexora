@@ -5,7 +5,14 @@
  * @since 1.0.0
  * @author Simon Kovtyk
  */
-type Translatables = Record<string, unknown>;
+type Translation = string | number;
+
+type TranslationsByToken = Record<string, Translation>;
+
+type ScopedTranslationsByToken<TScopes extends Scopes = Scopes> = Record<
+  TScopes[number],
+  TranslationsByToken
+>;
 
 /**
  * Scopes, that'll be passed down to adapters
@@ -25,6 +32,11 @@ type Scopes = string[];
  */
 type Path = string[];
 
+type Lang = {
+  name: string;
+  code: string;
+};
+
 /**
  * Args for a {@link TranslateFn}, that is able to translate
  *
@@ -34,7 +46,7 @@ type Path = string[];
  */
 type TranslateFnArgs = {
   token: string;
-  scope?: string;
+  scope: string;
 };
 
 /**
@@ -44,8 +56,8 @@ type TranslateFnArgs = {
  * @category Types
  * @author Simon Kovtyk
  */
-type TranslateFnArgsWithTranslatables = TranslateFnArgs & {
-  translatables: Translatables;
+type TranslateFnArgsWithTranslations = TranslateFnArgs & {
+  translations: ScopedTranslationsByToken;
 };
 
 /**
@@ -65,8 +77,8 @@ type TranslateFn = (args: TranslateFnArgs) => unknown;
  * @author Simon Kovtyk
  */
 type AdapterOperationFnArgs = {
-  scopes?: Scopes;
-  locale: string;
+  scopes: Scopes;
+  lang: string;
 };
 
 /**
@@ -76,7 +88,7 @@ type AdapterOperationFnArgs = {
  * @category Types
  * @author Simon Kovtyk
  */
-type SyncAdapterOperationFnReturn = Translatables;
+type SyncAdapterOperationFnReturn = ScopedTranslationsByToken;
 
 /**
  * Async result of {@link AdapterOperationFn}
@@ -105,6 +117,14 @@ type AdapterOperationFnReturn = MaybePromise<SyncAdapterOperationFnReturn>;
  */
 type AdapterOperationFn = (args: AdapterOperationFnArgs) => AdapterOperationFnReturn;
 
+type SyncAdapterLangsFnReturn = Lang[];
+
+type AsyncAdapterLangsFnReturn = Promise<SyncAdapterLangsFnReturn>;
+
+type AdapterLangsFnReturn = MaybePromise<SyncAdapterLangsFnReturn>;
+
+type AdapterLangsFn = () => AdapterLangsFnReturn;
+
 /**
  * Utility type, that makes a type an optional promise.
  *
@@ -131,7 +151,8 @@ type SyncAdapterFnReturn = {
    * @since 1.0.0
    * @author Simon Kovtyk
    */
-  get: AdapterOperationFn;
+  getTranslatables: AdapterOperationFn;
+  getLangs: AdapterLangsFn;
 };
 
 /**
@@ -162,11 +183,14 @@ type AdapterFnReturn = MaybePromise<SyncAdapterFnReturn>;
 type AdapterFn = (...args: unknown[]) => AdapterFnReturn;
 
 export type {
-  Translatables,
+  Translation,
+  TranslationsByToken,
+  ScopedTranslationsByToken,
   Scopes,
   Path,
+  Lang,
   TranslateFnArgs,
-  TranslateFnArgsWithTranslatables,
+  TranslateFnArgsWithTranslations,
   TranslateFn,
   AdapterOperationFnArgs,
   MaybePromise,
@@ -176,6 +200,10 @@ export type {
   AdapterOperationFn,
   SyncAdapterFnReturn,
   AsyncAdapterFnReturn,
+  SyncAdapterLangsFnReturn,
+  AsyncAdapterLangsFnReturn,
+  AdapterLangsFnReturn,
+  AdapterLangsFn,
   AdapterFnReturn,
   AdapterFn
 };

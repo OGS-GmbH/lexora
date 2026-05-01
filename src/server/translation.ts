@@ -1,10 +1,29 @@
 import { translate as internalTranslate } from "../shared/translate.js";
 import type {
-  Translatables,
   Scopes,
-  TranslateFnArgsWithTranslatables,
-  AdapterFnReturn
+  SyncAdapterFnReturn,
+  ScopedTranslationsByToken,
+  TranslateFnArgsWithTranslations
 } from "../shared/types.js";
+
+type GetTranslationsArgs<TScopes extends Scopes> = {
+  /**
+   * Possible {@link Scopes}, that'll be passed down to each adapter
+   *
+   * @author Simon Kovtyk
+   * @since 1.0.0
+   */
+  scopes: TScopes;
+  /**
+   * Locale of the language (e.g. en-US)
+   *
+   * @author Simon Kovtyk
+   * @since 1.0.0
+   */
+  lang: string;
+};
+
+type GetTranslationsReturn<TScopes extends Scopes> = Promise<ScopedTranslationsByToken<TScopes>>;
 
 /**
  * Args for {@link getTranslations}
@@ -13,28 +32,14 @@ import type {
  * @since 1.0.0
  * @category Server-side
  */
-type GetTranslationsArgs = {
+type GetTranslationsCallbackArgs = {
   /**
    * An `Array` of {@link AdapterFnReturn}, where adapters are registered.
    *
    * @author Simon Kovtyk
    * @since 1.0.0
    */
-  adapters: AdapterFnReturn[];
-  /**
-   * Possible {@link Scopes}, that'll be passed down to each adapter
-   *
-   * @author Simon Kovtyk
-   * @since 1.0.0
-   */
-  scopes?: Scopes;
-  /**
-   * Locale of the language (e.g. en-US)
-   *
-   * @author Simon Kovtyk
-   * @since 1.0.0
-   */
-  locale: string;
+  adapters: SyncAdapterFnReturn[];
 };
 
 /**
@@ -47,27 +52,28 @@ type GetTranslationsArgs = {
  * @since 1.0.0
  * @category Server-side
  */
-async function getTranslations({
-  adapters,
-  scopes,
-  locale
-}: GetTranslationsArgs): Promise<Translatables> {
-  const translatables: Translatables = {};
+function getTranslationsCallback({ adapters }: GetTranslationsCallbackArgs) {
+  return async function getTranslation<const TScopes extends Scopes>({
+    lang,
+    scopes
+  }: GetTranslationsArgs<TScopes>): GetTranslationsReturn<typeof scopes> {
+    const translations: ScopedTranslationsByToken<TScopes> =
+      {} as ScopedTranslationsByToken<TScopes>;
 
-  for (const adapter of adapters) {
-    const adapterReturn = await Promise.resolve(adapter);
+    for (const adapter of adapters) {
+      const adapterTranslations = await Promise.resolve(
+        adapter.getTranslatables({
+          lang,
+          scopes
+        })
+      );
 
-    const currentTranslatables = await Promise.resolve(
-      adapterReturn.get({
-        locale,
-        scopes
-      })
-    );
+      for (const scope in adapterTranslations)
+        translations[scope as TScopes[number]] = adapterTranslations[scope]!;
+    }
 
-    for (const key in currentTranslatables) translatables[key] = currentTranslatables[key];
-  }
-
-  return translatables;
+    return translations;
+  };
 }
 
 /**
@@ -80,10 +86,10 @@ async function getTranslations({
  * @since 1.0.0
  * @category Server-side
  */
-function translate(args: TranslateFnArgsWithTranslatables): unknown {
+function translate(args: TranslateFnArgsWithTranslations): unknown {
   return internalTranslate(args);
 }
 
-export type { GetTranslationsArgs };
+export type { GetTranslationsCallbackArgs, GetTranslationsArgs, GetTranslationsReturn };
 
-export { getTranslations, translate };
+export { getTranslationsCallback, translate };

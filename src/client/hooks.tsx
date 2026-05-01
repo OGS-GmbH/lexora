@@ -2,11 +2,17 @@
 
 import { useContext } from "react";
 import { translate } from "../shared/translate.js";
-import type { Scopes, Translatables, TranslateFn, TranslateFnArgs } from "../shared/types.js";
-import { LexoraContext, LexoraLocaleContext } from "./context.js";
+import type {
+  Lang,
+  ScopedTranslationsByToken,
+  Scopes,
+  TranslateFn,
+  TranslateFnArgs
+} from "../shared/types.js";
+import { LexoraContext, LexoraLangContext } from "./context.js";
 
-function useLocale(): string {
-  return useContext(LexoraLocaleContext)!;
+function useLang(): Lang {
+  return useContext(LexoraLangContext)!;
 }
 
 /**
@@ -16,10 +22,10 @@ function useLocale(): string {
  * @author Simon Kovtyk
  * @category Client-side
  */
-type UseTranslationReturn = {
-  translatables: Translatables;
+type UseTranslationReturn<TScopes extends Scopes = Scopes> = {
+  translations: ScopedTranslationsByToken<TScopes>;
   translate: TranslateFn;
-  scopes?: Scopes[];
+  scopes: Scopes;
 };
 
 /**
@@ -30,21 +36,21 @@ type UseTranslationReturn = {
  * @author Simon Kovtyk
  * @category Client-side
  */
-function useTranslation(): UseTranslationReturn {
-  const { translatables, scopes } = useContext(LexoraContext)!;
+function useTranslation<TScopes extends Scopes = Scopes>(): UseTranslationReturn<TScopes> {
+  const { translations, scopes } = useContext(LexoraContext)!;
 
   return {
     scopes,
-    translatables,
+    translations,
     translate: ({ token, scope }: TranslateFnArgs): unknown =>
       translate({
         token,
         scope,
-        translatables
+        translations
       })
   };
 }
 
 export type { UseTranslationReturn };
 
-export { useTranslation, useLocale };
+export { useTranslation, useLang };
