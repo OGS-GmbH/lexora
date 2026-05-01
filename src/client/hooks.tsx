@@ -2,8 +2,18 @@
 
 import { useContext } from "react";
 import { translate } from "../shared/translate.js";
-import type { TranslateFn, TranslateFnArgs } from "../shared/types.js";
-import { LexoraContext } from "./context.js";
+import type {
+  Lang,
+  ScopedTranslationsByToken,
+  Scopes,
+  TranslateFn,
+  TranslateFnArgs
+} from "../shared/types.js";
+import { LexoraContext, LexoraLangContext } from "./context.js";
+
+function useLang(): Lang {
+  return useContext(LexoraLangContext)!;
+}
 
 /**
  * Result of {@link useTranslation} hook
@@ -12,7 +22,11 @@ import { LexoraContext } from "./context.js";
  * @author Simon Kovtyk
  * @category Client-side
  */
-type UseTranslationReturn = TranslateFn;
+type UseTranslationReturn<TScopes extends Scopes = Scopes> = {
+  translations: ScopedTranslationsByToken<TScopes>;
+  translate: TranslateFn;
+  scopes: Scopes;
+};
 
 /**
  * React hook for translating a token.
@@ -22,17 +36,21 @@ type UseTranslationReturn = TranslateFn;
  * @author Simon Kovtyk
  * @category Client-side
  */
-function useTranslation(): UseTranslationReturn {
-  const translatables = useContext(LexoraContext)!;
+function useTranslation<TScopes extends Scopes = Scopes>(): UseTranslationReturn<TScopes> {
+  const { translations, scopes } = useContext(LexoraContext)!;
 
-  return ({ token, scope }: TranslateFnArgs): unknown =>
-    translate({
-      token,
-      scope,
-      translatables
-    });
+  return {
+    scopes,
+    translations,
+    translate: ({ token, scope }: TranslateFnArgs): unknown =>
+      translate({
+        token,
+        scope,
+        translations
+      })
+  };
 }
 
 export type { UseTranslationReturn };
 
-export { useTranslation };
+export { useTranslation, useLang };

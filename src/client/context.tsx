@@ -1,7 +1,21 @@
 "use client";
 
 import { createContext } from "react";
-import type { Translatables } from "../shared/types.js";
+import type { Lang, ScopedTranslationsByToken, Scopes } from "../shared/types.js";
+
+type LexoraContextValue<TScopes extends Scopes = Scopes> = {
+  /**
+   * Contains {@link Translatables}
+   *
+   * @author Simon Kovtyk
+   * @since 1.0.0
+   */
+  translations: ScopedTranslationsByToken<TScopes>;
+  /**
+   * Contains {@link Scopes}
+   */
+  scopes: Scopes;
+};
 
 /**
  * React Context to provide {@link Translatables} for the client-side.
@@ -10,6 +24,10 @@ import type { Translatables } from "../shared/types.js";
  * @since 1.0.0
  * @category Client-side
  */
-const LexoraContext = createContext<Translatables | null>(null);
+const LexoraContext = createContext<LexoraContextValue | null>(null);
 
-export { LexoraContext };
+const LexoraLangContext = createContext<Lang | null>(null);
+
+export { LexoraContext, LexoraLangContext };
+
+export type { LexoraContextValue };
