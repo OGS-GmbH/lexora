@@ -26,8 +26,13 @@ type LexoraContextValue<TScopes extends Scopes = Scopes> = {
  */
 const LexoraContext = createContext<LexoraContextValue | null>(null);
 
-const LexoraLangContext = createContext<Lang | null>(null);
+type LexoraLangContextValue = {
+  current: Lang;
+  all: Lang[];
+};
+
+const LexoraLangContext = createContext<LexoraLangContextValue | null>(null);
 
 export { LexoraContext, LexoraLangContext };
 
-export type { LexoraContextValue };
+export type { LexoraContextValue, LexoraLangContextValue };
