@@ -1,16 +1,22 @@
 "use client";
 
 import { type ReactNode } from "react";
-import type { Lang, ScopedTranslationsByToken, Scopes } from "../shared/types.js";
-import { LexoraContext, type LexoraContextValue, LexoraLangContext } from "./context.js";
+import type { ScopedTranslationsByToken, Scopes } from "../shared/types.js";
+import {
+  LexoraContext,
+  type LexoraContextValue,
+  LexoraLangContext,
+  type LexoraLangContextValue
+} from "./context.js";
 
-type LexoraLangProviderProps = {
-  lang: Lang;
+type LexoraLangProviderProps = LexoraLangContextValue & {
   children: ReactNode;
 };
 
-function LexoraLangProvider({ lang, children }: LexoraLangProviderProps) {
-  return <LexoraLangContext.Provider value={lang}>{children}</LexoraLangContext.Provider>;
+function LexoraLangProvider({ current, all, children }: LexoraLangProviderProps) {
+  return (
+    <LexoraLangContext.Provider value={{ current, all }}>{children}</LexoraLangContext.Provider>
+  );
 }
 
 /**

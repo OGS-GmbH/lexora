@@ -3,15 +3,14 @@
 import { useContext } from "react";
 import { translate } from "../shared/translate.js";
 import type {
-  Lang,
   ScopedTranslationsByToken,
   Scopes,
   TranslateFn,
   TranslateFnArgs
 } from "../shared/types.js";
-import { LexoraContext, LexoraLangContext } from "./context.js";
+import { LexoraContext, LexoraLangContext, type LexoraLangContextValue } from "./context.js";
 
-function useLang(): Lang {
+function useLang(): LexoraLangContextValue {
   return useContext(LexoraLangContext)!;
 }
 
