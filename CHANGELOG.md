@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/OGS-GmbH/lexora/compare/v2.0.0...v2.1.0) (2026-05-04)
+
+
+### Features
+
+* add langs to lang-provider ([#4](https://github.com/OGS-GmbH/lexora/issues/4)) ([c9ea94d](https://github.com/OGS-GmbH/lexora/commit/c9ea94d32cc4f0342e6f4d89b191d93e2e3c8e85))
+
 ## [2.0.0](https://github.com/OGS-GmbH/lexora/compare/v1.0.0...v2.0.0) (2026-05-01)
 
 
