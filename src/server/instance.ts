@@ -1,6 +1,6 @@
 import { translate } from "../shared/translate.js";
 import type { AdapterFnReturn } from "../shared/types.js";
-import { getLangsCallback, getLangStore } from "./lang.js";
+import { getDefaultLangCallback, getLangsCallback, getLangStore } from "./lang.js";
 import { getTranslationsCallback } from "./translation.js";
 
 type LexoraArgs = {
@@ -20,6 +20,7 @@ async function lexora({ adapters }: LexoraArgs) {
   return {
     getTranslations: getTranslationsCallback({ adapters: resolvedAdapters }),
     getLangs: getLangsCallback({ adapters: resolvedAdapters }),
+    getDefaultLang: getDefaultLangCallback({ adapters: resolvedAdapters }),
     getLang: get,
     setLang: set,
     translate: translate

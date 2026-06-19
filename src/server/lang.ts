@@ -41,13 +41,34 @@ function getLangStore(): GetLangStoreReturn {
   };
 }
 
+type GetDefaultLangCallbackArgs = {
+  adapters: SyncAdapterFnReturn[];
+};
+
+type GetDefaultLangReturn = Promise<Lang>;
+
+type GetDefaultLangFn = () => GetDefaultLangReturn;
+
+function getDefaultLangCallback({ adapters }: GetDefaultLangCallbackArgs): GetDefaultLangFn {
+  return async (): GetDefaultLangReturn => {
+    let defaultLang: Lang;
+
+    for (const adapter of adapters) defaultLang = await Promise.resolve(adapter.getDefaultLang());
+
+    return defaultLang!;
+  };
+}
+
 export type {
   GetLangsCallbackArgs,
   GetLangsReturn,
   GetLangsFn,
   SetLangFn,
   GetLangFn,
-  GetLangStoreReturn
+  GetLangStoreReturn,
+  GetDefaultLangCallbackArgs,
+  GetDefaultLangFn,
+  GetDefaultLangReturn
 };
 
-export { getLangsCallback, getLangStore };
+export { getLangsCallback, getLangStore, getDefaultLangCallback };

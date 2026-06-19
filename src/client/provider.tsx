@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
-import type { ScopedTranslationsByToken, Scopes } from "../shared/types.js";
+import type { Scopes } from "../shared/types.js";
 import {
   LexoraContext,
   type LexoraContextValue,
@@ -27,7 +27,6 @@ function LexoraLangProvider({ current, all, children }: LexoraLangProviderProps)
  * @category Client-side
  */
 type LexoraTranslationsProviderProps<TScopes extends Scopes> = LexoraContextValue<TScopes> & {
-  translations: ScopedTranslationsByToken;
   /**
    * Children of {@link LexoraProvider}
    *

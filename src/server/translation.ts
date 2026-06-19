@@ -62,7 +62,7 @@ function getTranslationsCallback({ adapters }: GetTranslationsCallbackArgs) {
 
     for (const adapter of adapters) {
       const adapterTranslations = await Promise.resolve(
-        adapter.getTranslatables({
+        adapter.getTranslations({
           lang,
           scopes
         })
