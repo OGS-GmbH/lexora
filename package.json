@@ -1,6 +1,6 @@
 {
   "name": "@ogs-gmbh/lexora",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Zero-friction translation library for Next.js with fast server and client APIs and a clean developer experience.",
   "keywords": [
     "app-router",
