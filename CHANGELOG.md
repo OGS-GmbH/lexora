@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/OGS-GmbH/lexora/compare/v2.1.0...v2.2.0) (2026-06-19)
+
+
+### Features
+
+* add default lang api ([a8bbfa6](https://github.com/OGS-GmbH/lexora/commit/a8bbfa68e16a460e9be7ceea80250a7abf1d59b2))
+
 ## [2.1.0](https://github.com/OGS-GmbH/lexora/compare/v2.0.0...v2.1.0) (2026-05-04)
 
 
