@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/OGS-GmbH/lexora/compare/v2.2.0...v2.3.0) (2026-08-16)
+
+
+### Features
+
+* add instance type ([81e19cc](https://github.com/OGS-GmbH/lexora/commit/81e19cc1dda358a55e1212ce671429207773e6ef))
+
 ## [2.2.0](https://github.com/OGS-GmbH/lexora/compare/v2.1.0...v2.2.0) (2026-06-19)
 
 
