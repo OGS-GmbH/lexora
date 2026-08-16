@@ -1,5 +1,5 @@
 import { translate } from "../shared/translate.js";
-import type { AdapterFnReturn } from "../shared/types.js";
+import type { AdapterFnReturn, LexoraInstance } from "../shared/types.js";
 import { getDefaultLangCallback, getLangsCallback, getLangStore } from "./lang.js";
 import { getTranslationsCallback } from "./translation.js";
 
@@ -13,7 +13,7 @@ type LexoraArgs = {
   adapters: AdapterFnReturn[];
 };
 
-async function lexora({ adapters }: LexoraArgs) {
+async function lexora({ adapters }: LexoraArgs): Promise<LexoraInstance> {
   const resolvedAdapters = await Promise.all(adapters.map((adapter) => Promise.resolve(adapter)));
   const { get, set } = getLangStore();
 

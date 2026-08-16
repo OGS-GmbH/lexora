@@ -1,3 +1,11 @@
+import {
+  type GetLangFn,
+  type SetLangFn,
+  type GetLangsFn,
+  type GetDefaultLangFn
+} from "../server/lang.js";
+import { type GetTranslationsFn } from "../server/translation.js";
+
 /**
  * `Record` of token-to-translatables
  *
@@ -192,6 +200,15 @@ type AdapterFnReturn = MaybePromise<SyncAdapterFnReturn>;
  */
 type AdapterFn = (...args: unknown[]) => AdapterFnReturn;
 
+type LexoraInstance = {
+  getTranslations: GetTranslationsFn;
+  getLangs: GetLangsFn;
+  getDefaultLang: GetDefaultLangFn;
+  getLang: GetLangFn;
+  setLang: SetLangFn;
+  translate: TranslateFn;
+};
+
 export type {
   Translation,
   TranslationsByToken,
@@ -219,5 +236,6 @@ export type {
   AdapterDefaultLangFnReturn,
   AdapterDefaultLangFn,
   AdapterFnReturn,
-  AdapterFn
+  AdapterFn,
+  LexoraInstance
 };

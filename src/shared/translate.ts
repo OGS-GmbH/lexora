@@ -1,6 +1,6 @@
 import type { Translation, TranslateFnArgsWithTranslations } from "./types.js";
 
-type TranslateFn = (args: TranslateFnArgsWithTranslations) => unknown;
+type TranslateFn = (args: TranslateFnArgsWithTranslations) => Translation;
 
 /**
  * Fn, that is used both on client and server side to translate a token while using other factors like a scope

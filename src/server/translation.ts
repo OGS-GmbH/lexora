@@ -25,6 +25,8 @@ type GetTranslationsArgs<TScopes extends Scopes> = {
 
 type GetTranslationsReturn<TScopes extends Scopes> = Promise<ScopedTranslationsByToken<TScopes>>;
 
+type GetTranslationsFn = (args: GetTranslationsArgs<Scopes>) => GetTranslationsReturn<Scopes>;
+
 /**
  * Args for {@link getTranslations}
  *
@@ -52,8 +54,8 @@ type GetTranslationsCallbackArgs = {
  * @since 1.0.0
  * @category Server-side
  */
-function getTranslationsCallback({ adapters }: GetTranslationsCallbackArgs) {
-  return async function getTranslation<const TScopes extends Scopes>({
+function getTranslationsCallback({ adapters }: GetTranslationsCallbackArgs): GetTranslationsFn {
+  return async function getTranslations<const TScopes extends Scopes>({
     lang,
     scopes
   }: GetTranslationsArgs<TScopes>): GetTranslationsReturn<typeof scopes> {
@@ -90,6 +92,11 @@ function translate(args: TranslateFnArgsWithTranslations): unknown {
   return internalTranslate(args);
 }
 
-export type { GetTranslationsCallbackArgs, GetTranslationsArgs, GetTranslationsReturn };
+export type {
+  GetTranslationsCallbackArgs,
+  GetTranslationsArgs,
+  GetTranslationsReturn,
+  GetTranslationsFn
+};
 
 export { getTranslationsCallback, translate };
