@@ -1,11 +1,3 @@
-import {
-  type GetLangFn,
-  type SetLangFn,
-  type GetLangsFn,
-  type GetDefaultLangFn
-} from "../server/lang.js";
-import { type GetTranslationsFn } from "../server/translation.js";
-
 /**
  * `Record` of token-to-translatables
  *
@@ -32,7 +24,7 @@ type ScopedTranslationsByToken<TScopes extends Scopes = Scopes> = Record<
 type Scopes = string[];
 
 /**
- * Path, that can be used to pick a translation inside {@link Translatables}
+ * Path, that can be used to pick a translation inside {@link ScopedTranslationsByToken}
  *
  * @category Types
  * @since 1.0.0
@@ -59,7 +51,7 @@ type TranslateFnArgs = {
 };
 
 /**
- * {@link TranslateFnArgs} with known {@link Translatables}
+ * {@link TranslateFnArgs} with known {@link Translation}s
  *
  * @since 1.0.0
  * @category Types
@@ -76,10 +68,12 @@ type TranslateFnArgsWithTranslations = TranslateFnArgs & {
  * @category Types
  * @author Simon Kovtyk
  */
-type TranslateFn = (args: TranslateFnArgs) => unknown;
+type TranslateFn = (args: TranslateFnArgs) => Translation;
+
+type TranslateFnWithTranslations = (args: TranslateFnArgsWithTranslations) => Translation;
 
 /**
- * Operation args for {@link AdapterOperationFn}
+ * Operation args for {@link AdapterTranslationsFn}
  *
  * @since 1.0.0
  * @category Types
@@ -91,7 +85,7 @@ type AdapterTranslationsFnArgs = {
 };
 
 /**
- * Sync result of {@link AdapterOperationFn}
+ * Sync result of {@link AdapterTranslationsFn}
  *
  * @since 1.0.0
  * @category Types
@@ -100,7 +94,7 @@ type AdapterTranslationsFnArgs = {
 type SyncAdapterTranslationsFnReturn = ScopedTranslationsByToken;
 
 /**
- * Async result of {@link AdapterOperationFn}
+ * Async result of {@link AdapterTranslationsFn}
  *
  * @since 1.0.0
  * @category Types
@@ -109,7 +103,7 @@ type SyncAdapterTranslationsFnReturn = ScopedTranslationsByToken;
 type AsyncAdapterTranslationsFnReturn = Promise<SyncAdapterTranslationsFnReturn>;
 
 /**
- * Combined result of {@link AdapterOperationFn} with async & sync support
+ * Combined result of {@link AdapterTranslationsFn} with async & sync support
  *
  * @since 1.0.0
  * @category Types
@@ -118,7 +112,7 @@ type AsyncAdapterTranslationsFnReturn = Promise<SyncAdapterTranslationsFnReturn>
 type AdapterTranslationsFnReturn = MaybePromise<SyncAdapterTranslationsFnReturn>;
 
 /**
- * Fn, that is able to provide {@link Translatables}
+ * Fn, that is able to provide {@link Translation}s
  *
  * @since 1.0.0
  * @category Types
@@ -163,7 +157,7 @@ type MaybePromise<T> = T | Promise<T>;
  */
 type SyncAdapterFnReturn = {
   /**
-   * An {@link AdapterOperationFn}, that'll be used to get translations
+   * An interface for adapter capabilities
    *
    * @since 1.0.0
    * @author Simon Kovtyk
@@ -200,15 +194,6 @@ type AdapterFnReturn = MaybePromise<SyncAdapterFnReturn>;
  */
 type AdapterFn = (...args: unknown[]) => AdapterFnReturn;
 
-type LexoraInstance = {
-  getTranslations: GetTranslationsFn;
-  getLangs: GetLangsFn;
-  getDefaultLang: GetDefaultLangFn;
-  getLang: GetLangFn;
-  setLang: SetLangFn;
-  translate: TranslateFn;
-};
-
 export type {
   Translation,
   TranslationsByToken,
@@ -219,6 +204,7 @@ export type {
   TranslateFnArgs,
   TranslateFnArgsWithTranslations,
   TranslateFn,
+  TranslateFnWithTranslations,
   AdapterTranslationsFnArgs,
   MaybePromise,
   SyncAdapterTranslationsFnReturn,
@@ -236,6 +222,5 @@ export type {
   AdapterDefaultLangFnReturn,
   AdapterDefaultLangFn,
   AdapterFnReturn,
-  AdapterFn,
-  LexoraInstance
+  AdapterFn
 };

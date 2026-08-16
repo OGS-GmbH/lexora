@@ -1,17 +1,7 @@
 import { translate } from "../shared/translate.js";
-import type { AdapterFnReturn, LexoraInstance } from "../shared/types.js";
 import { getDefaultLangCallback, getLangsCallback, getLangStore } from "./lang.js";
 import { getTranslationsCallback } from "./translation.js";
-
-type LexoraArgs = {
-  /**
-   * An `Array` of {@link AdapterFnReturn}, where adapters are registered.
-   *
-   * @author Simon Kovtyk
-   * @since 1.0.0
-   */
-  adapters: AdapterFnReturn[];
-};
+import type { LexoraArgs, LexoraInstance } from "./types.js";
 
 async function lexora({ adapters }: LexoraArgs): Promise<LexoraInstance> {
   const resolvedAdapters = await Promise.all(adapters.map((adapter) => Promise.resolve(adapter)));
@@ -23,10 +13,8 @@ async function lexora({ adapters }: LexoraArgs): Promise<LexoraInstance> {
     getDefaultLang: getDefaultLangCallback({ adapters: resolvedAdapters }),
     getLang: get,
     setLang: set,
-    translate: translate
+    translate
   };
 }
 
 export { lexora };
-
-export type { LexoraArgs };

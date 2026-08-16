@@ -2,30 +2,13 @@
 
 import { useContext } from "react";
 import { translate } from "../shared/translate.js";
-import type {
-  ScopedTranslationsByToken,
-  Scopes,
-  TranslateFn,
-  TranslateFnArgs
-} from "../shared/types.js";
-import { LexoraContext, LexoraLangContext, type LexoraLangContextValue } from "./context.js";
+import type { Scopes, TranslateFnArgs, Translation } from "../shared/types.js";
+import { LexoraContext, LexoraLangContext } from "./context.js";
+import type { LexoraLangContextValue, UseTranslationReturn } from "./types.js";
 
 function useLang(): LexoraLangContextValue {
   return useContext(LexoraLangContext)!;
 }
-
-/**
- * Result of {@link useTranslation} hook
- *
- * @since 1.0.0
- * @author Simon Kovtyk
- * @category Client-side
- */
-type UseTranslationReturn<TScopes extends Scopes = Scopes> = {
-  translations: ScopedTranslationsByToken<TScopes>;
-  translate: TranslateFn;
-  scopes: Scopes;
-};
 
 /**
  * React hook for translating a token.
@@ -41,7 +24,7 @@ function useTranslation<TScopes extends Scopes = Scopes>(): UseTranslationReturn
   return {
     scopes,
     translations,
-    translate: ({ token, scope }: TranslateFnArgs): unknown =>
+    translate: ({ token, scope }: TranslateFnArgs): Translation =>
       translate({
         token,
         scope,
@@ -49,7 +32,5 @@ function useTranslation<TScopes extends Scopes = Scopes>(): UseTranslationReturn
       })
   };
 }
-
-export type { UseTranslationReturn };
 
 export { useTranslation, useLang };

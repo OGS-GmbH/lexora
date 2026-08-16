@@ -1,54 +1,21 @@
 import { translate as internalTranslate } from "../shared/translate.js";
 import type {
   Scopes,
-  SyncAdapterFnReturn,
   ScopedTranslationsByToken,
   TranslateFnArgsWithTranslations
 } from "../shared/types.js";
-
-type GetTranslationsArgs<TScopes extends Scopes> = {
-  /**
-   * Possible {@link Scopes}, that'll be passed down to each adapter
-   *
-   * @author Simon Kovtyk
-   * @since 1.0.0
-   */
-  scopes: TScopes;
-  /**
-   * Locale of the language (e.g. en-US)
-   *
-   * @author Simon Kovtyk
-   * @since 1.0.0
-   */
-  lang: string;
-};
-
-type GetTranslationsReturn<TScopes extends Scopes> = Promise<ScopedTranslationsByToken<TScopes>>;
-
-type GetTranslationsFn = (args: GetTranslationsArgs<Scopes>) => GetTranslationsReturn<Scopes>;
-
-/**
- * Args for {@link getTranslations}
- *
- * @author Simon Kovtyk
- * @since 1.0.0
- * @category Server-side
- */
-type GetTranslationsCallbackArgs = {
-  /**
-   * An `Array` of {@link AdapterFnReturn}, where adapters are registered.
-   *
-   * @author Simon Kovtyk
-   * @since 1.0.0
-   */
-  adapters: SyncAdapterFnReturn[];
-};
+import type {
+  GetTranslationsArgs,
+  GetTranslationsCallbackArgs,
+  GetTranslationsFn,
+  GetTranslationsReturn
+} from "./types.js";
 
 /**
  * Load translations by configured adapters
  *
  * @param options - An `Object` of {@link GetTranslationsArgs}
- * @returns A `Promise` containing {@link Translatables}
+ * @returns A `Promise` containing {@link Translation}s
  *
  * @author Simon Kovtyk
  * @since 1.0.0
@@ -81,7 +48,7 @@ function getTranslationsCallback({ adapters }: GetTranslationsCallbackArgs): Get
 /**
  * Translate a token
  *
- * @param args - {@link TranslateFnArgsWithTranslatables}
+ * @param args - {@link TranslateFnArgsWithTranslations}
  * @returns Translated value
  *
  * @author Simon Kovtyk
@@ -91,12 +58,5 @@ function getTranslationsCallback({ adapters }: GetTranslationsCallbackArgs): Get
 function translate(args: TranslateFnArgsWithTranslations): unknown {
   return internalTranslate(args);
 }
-
-export type {
-  GetTranslationsCallbackArgs,
-  GetTranslationsArgs,
-  GetTranslationsReturn,
-  GetTranslationsFn
-};
 
 export { getTranslationsCallback, translate };

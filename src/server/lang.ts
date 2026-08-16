@@ -1,12 +1,13 @@
-import type { Lang, SyncAdapterFnReturn } from "../shared/types.js";
-
-type GetLangsCallbackArgs = {
-  adapters: SyncAdapterFnReturn[];
-};
-
-type GetLangsReturn = Promise<Lang[]>;
-
-type GetLangsFn = () => GetLangsReturn;
+import type { Lang } from "../shared/types.js";
+import type {
+  GetDefaultLangCallbackArgs,
+  GetDefaultLangFn,
+  GetDefaultLangReturn,
+  GetLangsCallbackArgs,
+  GetLangsFn,
+  GetLangsReturn,
+  GetLangStoreReturn
+} from "./types.js";
 
 function getLangsCallback({ adapters }: GetLangsCallbackArgs): GetLangsFn {
   return async function getLangs(): GetLangsReturn {
@@ -22,14 +23,6 @@ function getLangsCallback({ adapters }: GetLangsCallbackArgs): GetLangsFn {
   };
 }
 
-type SetLangFn = (lang: Lang) => void;
-type GetLangFn = () => Lang | null;
-
-type GetLangStoreReturn = {
-  set: SetLangFn;
-  get: GetLangFn;
-};
-
 function getLangStore(): GetLangStoreReturn {
   let currentLang: Lang | null = null;
 
@@ -41,14 +34,6 @@ function getLangStore(): GetLangStoreReturn {
   };
 }
 
-type GetDefaultLangCallbackArgs = {
-  adapters: SyncAdapterFnReturn[];
-};
-
-type GetDefaultLangReturn = Promise<Lang>;
-
-type GetDefaultLangFn = () => GetDefaultLangReturn;
-
 function getDefaultLangCallback({ adapters }: GetDefaultLangCallbackArgs): GetDefaultLangFn {
   return async (): GetDefaultLangReturn => {
     let defaultLang: Lang;
@@ -58,17 +43,5 @@ function getDefaultLangCallback({ adapters }: GetDefaultLangCallbackArgs): GetDe
     return defaultLang!;
   };
 }
-
-export type {
-  GetLangsCallbackArgs,
-  GetLangsReturn,
-  GetLangsFn,
-  SetLangFn,
-  GetLangFn,
-  GetLangStoreReturn,
-  GetDefaultLangCallbackArgs,
-  GetDefaultLangFn,
-  GetDefaultLangReturn
-};
 
 export { getLangsCallback, getLangStore, getDefaultLangCallback };

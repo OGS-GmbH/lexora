@@ -2,12 +2,8 @@
 
 import { type ReactNode } from "react";
 import type { Scopes } from "../shared/types.js";
-import {
-  LexoraContext,
-  type LexoraContextValue,
-  LexoraLangContext,
-  type LexoraLangContextValue
-} from "./context.js";
+import { LexoraContext, LexoraLangContext } from "./context.js";
+import type { LexoraContextValue, LexoraLangContextValue } from "./types.js";
 
 type LexoraLangProviderProps = LexoraLangContextValue & {
   children: ReactNode;
@@ -20,7 +16,7 @@ function LexoraLangProvider({ current, all, children }: LexoraLangProviderProps)
 }
 
 /**
- * Props for {@link LexoraProvider}
+ * Props for {@link LexoraTranslationsProvider}
  *
  * @author Simon Kovtyk
  * @since 1.0.0
@@ -28,7 +24,7 @@ function LexoraLangProvider({ current, all, children }: LexoraLangProviderProps)
  */
 type LexoraTranslationsProviderProps<TScopes extends Scopes> = LexoraContextValue<TScopes> & {
   /**
-   * Children of {@link LexoraProvider}
+   * Children of {@link LexoraTranslationsProvider}
    *
    * @author Simon Kovtyk
    * @since 1.0.0
@@ -37,9 +33,9 @@ type LexoraTranslationsProviderProps<TScopes extends Scopes> = LexoraContextValu
 };
 
 /**
- * Provider for {@link Translatables}, that'll be exposed for the client-side.
+ * Provider for {@link Translation}s, that'll be exposed for the client-side.
  *
- * @param props - Props of {@link LexoraProviderProps}
+ * @param props - Props of {@link LexoraTranslationsProviderProps}
  * @returns Provider of {@link LexoraContext} containing children
  *
  * @author Simon Kovtyk
